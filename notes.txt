@@ -1,0 +1,7 @@
+sudo apt update
+sudo apt install pkg-config libssl-dev openssl
+
+sqlx migrate add -r <name>
+i.e.
+sqlx migrate add -r add_my_table
+-- This create up and down sql files
