@@ -50,6 +50,13 @@ async fn main() -> std::io::Result<()> {
         Err(e) => println!("{}", e)
     };
 
+    println!("🚀 Starting database migrations...");
+    sqlx::migrate!("./migrations")
+        .run(&db_pool.pool)
+        .await
+        .expect("Failed to run database migrations");
+    println!("✅ Database migrations completed successfully!");
+
 
 
 

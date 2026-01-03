@@ -1,4 +1,7 @@
-/target
+# Rust artifacts
+/target/
 
+# Environment secrets
 .env
-/migrations
+.env.*
+!.env.example

@@ -138,7 +138,8 @@ impl AuthHandlers {
 
         // check if email exist
         let user_email_model = match UserEmailModel::get_by_value(&pool, &data.email).await{
-            Err(_) => {
+            Err(e) => {
+                log::error!("{}", e);
                 return JsonResponse::make_500_ressponse(&req);
             }
             Ok(None) => {
@@ -150,7 +151,8 @@ impl AuthHandlers {
 
         // check if user associated with the email exist
         let user_model = match user_email_model.get_user(&pool).await{
-            Err(_) => {
+            Err(e) => {
+                log::error!("{}", e);
                 return JsonResponse::make_500_ressponse(&req);
             }
             Ok(None) => {
@@ -161,7 +163,8 @@ impl AuthHandlers {
 
         // check if the password matched with the user's hashed password
         match user_model.check_password(&data.password){
-            Err(_) => {
+            Err(e) => {
+                log::error!("{}", e);
                 return JsonResponse::make_500_ressponse(&req);
             }
             Ok(result) => {
@@ -170,13 +173,15 @@ impl AuthHandlers {
                 }else{
                     // create tokens
                     match user_model.get_authid(&pool).await{
-                        Err(_) => {
+                        Err(e) => {
+                            log::error!("{}", e);
                             return JsonResponse::make_500_ressponse(&req);
                         }
                         Ok(user_authid_model) => {
                             // create token
                             let access_token = match JwtUtils::gen_access_token(&user_authid_model.value){
-                                Err(_) => {
+                                Err(e) => {
+                                    log::error!("{}", e);
                                     return JsonResponse::make_500_ressponse(&req);
                                 }
                                 Ok(at) => at
@@ -184,7 +189,8 @@ impl AuthHandlers {
                             };
 
                             let refresh_token = match JwtUtils::gen_refresh_token(&user_authid_model.value){
-                                Err(_) => {
+                                Err(e) => {
+                                    log::error!("{}", e);
                                     return JsonResponse::make_500_ressponse(&req);
                                 }
                                 Ok(rt) => rt

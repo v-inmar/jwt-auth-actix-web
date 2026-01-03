@@ -1,0 +1,82 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            SELECT id, firstname_id, lastname_id, email_id, pid_id, authid_id, password, datetime_deleted, datetime_deactivated, datetime_verified, datetime_created \n            FROM user_model\n            WHERE email_id = $1\n            ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 1,
+        "name": "firstname_id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 2,
+        "name": "lastname_id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 3,
+        "name": "email_id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 4,
+        "name": "pid_id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 5,
+        "name": "authid_id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 6,
+        "name": "password",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 7,
+        "name": "datetime_deleted",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 8,
+        "name": "datetime_deactivated",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 9,
+        "name": "datetime_verified",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 10,
+        "name": "datetime_created",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int4"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false
+    ]
+  },
+  "hash": "fbfbbae392aa2d14a6a9a66ab655d45d73552c2e409a04a70dbfe9268025f162"
+}

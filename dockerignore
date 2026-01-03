@@ -1,0 +1,9 @@
+# Ignore the heavy build artifacts
+target/
+
+# Ignore local environment variables (Docker uses the ones in compose)
+.env
+
+# Ignore git metadata
+.git
+.gitignore

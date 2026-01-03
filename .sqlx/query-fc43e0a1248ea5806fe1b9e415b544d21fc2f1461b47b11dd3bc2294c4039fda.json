@@ -1,0 +1,87 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            INSERT INTO user_model (firstname_id, lastname_id, email_id, pid_id, authid_id, password)\n            VALUES ($1, $2, $3, $4, $5, $6)\n            RETURNING id, firstname_id, lastname_id, email_id, pid_id, authid_id, password, datetime_deleted, datetime_deactivated, datetime_verified, datetime_created \n            ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 1,
+        "name": "firstname_id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 2,
+        "name": "lastname_id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 3,
+        "name": "email_id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 4,
+        "name": "pid_id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 5,
+        "name": "authid_id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 6,
+        "name": "password",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 7,
+        "name": "datetime_deleted",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 8,
+        "name": "datetime_deactivated",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 9,
+        "name": "datetime_verified",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 10,
+        "name": "datetime_created",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int4",
+        "Int4",
+        "Int4",
+        "Int4",
+        "Int4",
+        "Varchar"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false
+    ]
+  },
+  "hash": "fc43e0a1248ea5806fe1b9e415b544d21fc2f1461b47b11dd3bc2294c4039fda"
+}

@@ -1,0 +1,41 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            INSERT INTO user_revoked_token_model (value, datetime_ttl)\n            VALUES ($1, $2)\n            RETURNING id, value, datetime_ttl, datetime_created\n            ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 1,
+        "name": "value",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "datetime_ttl",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 3,
+        "name": "datetime_created",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Varchar",
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "329f554b774b9c2196fdb33cb1bf1f67e0350da034cb43e99dd1f3bfb9d6dd4e"
+}

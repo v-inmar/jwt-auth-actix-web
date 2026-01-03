@@ -16,3 +16,8 @@ rand = "0.9.2" # For generating random values
 serde = { version = "1.0.228", features = ["derive"] } # For serialization/deserialization
 sqlx = { version = "0.8.6", features = ["chrono", "postgres", "runtime-tokio", "tls-rustls"] } # For db (chrono feature here is to enable chrono)
 validator = { version = "0.20.0", features = ["derive"] } # For struct field validation
+
+
+[[bin]]
+name = "jwt-auth"
+path = "src/main.rs"  # This tells Cargo to use `src/main.rs` as the entry point
