@@ -1,6 +1,6 @@
 # Actix-web (REST), Postgres, JWT
 
-A small project showcasing how to use **Rust** as a backend REST API server using **Actix-web**. It is paired with **PostgreSQL** for persistence and **JSON Web Token** for **authorization/authentication**. **SQLx** is used for **asynchronous** communication with the database and for compile-time check. **Docker** is used to run the PostgreSQL container, however, it is still NOT utilizing **CI/CD**...yet(still working on this 😅).
+A small project showcasing how to use **Rust** as a backend REST API server using **Actix-web**. It is paired with **PostgreSQL** for persistence and **JSON Web Token** for **authorization/authentication**. **SQLx** is used for **asynchronous** communication with the database and for compile-time check. **Docker** (docker compose)is used to run Debian and PostgreSQL containers, however, it is still NOT utilizing **CI/CD**...yet(still working on this 😅).
 
 ## Objectives/Features
 ✅ Done/Completed/Implemented
@@ -18,7 +18,7 @@ A small project showcasing how to use **Rust** as a backend REST API server usin
 
 
 # Partial Doc - How To Run
-Must have .env file inside root directory that contains. Change the values as needed.
+Must have .env file inside root directory that contains these example values. Change the values as needed.
 ```sh
 SERVER_HOST=0.0.0.0
 SERVER_PORT=5000
@@ -31,13 +31,12 @@ ACCESS_TOKEN_EXPIRATION_MINUTES=5
 REFRESH_TOKEN_EXPIRATION_DAYS=7
 ```
 
-If running using **docker compose**, all the needed environment variables are inserted **docker-compose.yml** uses these credentials.
+If running using **docker compose**, all the needed environment variables (credentials) are inserted via **docker-compose.yml**.
 
 Also check notes.txt, it contains some useful commands
 
 # How to run with docker
-Make sure you have docker and docker compose installed
-and run this command
+Make sure you have docker and docker compose installed and run this command
 ```sh
 docker compose up --build
 ```
@@ -47,4 +46,4 @@ to clean it up
 docker compose down --volumes --remove-orphans
 ```
 
-Docker will handle the networking between the too services (app and db)
+Docker will handle the networking between the two services (app and db)
