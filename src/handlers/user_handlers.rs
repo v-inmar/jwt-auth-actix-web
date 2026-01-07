@@ -34,7 +34,7 @@ impl UserHandlers {
         let user_pid_model = match UserPidModel::get_by_value(&pool, &pid_value).await{
             Err(e) => {
                 log::error!("{}", e);
-                return JsonResponse::make_500_ressponse(&req);
+                return JsonResponse::make_500_response(&req);
             }
             Ok(None) => {
                 return JsonResponse::make_response(&req, &StatusCode::NOT_FOUND, String::from("User not found"));
@@ -46,7 +46,7 @@ impl UserHandlers {
         let user_model = match UserModel::get_by_pid_id(&pool, user_pid_model.id).await{
             Err(e) => {
                 log::error!("{}", e);
-                return JsonResponse::make_500_ressponse(&req);
+                return JsonResponse::make_500_response(&req);
             }
             Ok(None) => {
                 return JsonResponse::make_response(&req, &StatusCode::NOT_FOUND, String::from("User not found"));
@@ -57,7 +57,7 @@ impl UserHandlers {
         let to_print = match user_model.to_print(&req, &pool).await{
             Err(e) => {
                 log::error!("{}", e);
-                return JsonResponse::make_500_ressponse(&req);
+                return JsonResponse::make_500_response(&req);
             }
             Ok(obj) => obj
         };

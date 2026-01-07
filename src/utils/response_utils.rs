@@ -43,8 +43,8 @@ impl JsonResponse {
         let mut response_builder = HttpResponse::build(*code); // dereference code since it was being passed in as reference
         response_builder.content_type("application/json");
         return response_builder.json(ResponseDetails {
-            request_details: _create_request_details(req),
-            status_details: _create_status_details(code),
+            request_details: JsonResponse::_create_request_details(req),
+            status_details: JsonResponse::_create_status_details(code),
             payload: payload,
         });
     }
@@ -65,8 +65,8 @@ impl JsonResponse {
         response_builder.cookie(refresh_cookie);
 
         return response_builder.json(ResponseDetails {
-            request_details: _create_request_details(req),
-            status_details: _create_status_details(code),
+            request_details: JsonResponse::_create_request_details(req),
+            status_details: JsonResponse::_create_status_details(code),
             payload: PayloadAccessToken{
                 access_token: access_token.to_string()
             },
@@ -77,21 +77,28 @@ impl JsonResponse {
     }
 
     // we use server error response too often in many handlers, it is best to have a simple function to create the response
-    pub fn make_500_ressponse(req: &HttpRequest) -> HttpResponse {
+    pub fn make_500_response(req: &HttpRequest) -> HttpResponse {
         return JsonResponse::make_response(&req, &StatusCode::INTERNAL_SERVER_ERROR, constants::SERVER_ERROR_MESSAGE.to_string());
     }
-}
 
-fn _create_request_details(req: &HttpRequest) -> RequestDetails {
-    RequestDetails {
-        path: req.path().to_string(),
-        method: req.method().to_string(),
+
+
+    fn _create_request_details(req: &HttpRequest) -> RequestDetails {
+        RequestDetails {
+            path: req.path().to_string(),
+            method: req.method().to_string(),
+        }
+    }
+
+    fn _create_status_details(code: &StatusCode) -> StatusDetails {
+        StatusDetails {
+            code: code.as_u16(),
+            status: code.canonical_reason().unwrap_or("Status undefined").to_string(),
+        }
     }
 }
 
-fn _create_status_details(code: &StatusCode) -> StatusDetails {
-    StatusDetails {
-        code: code.as_u16(),
-        status: code.canonical_reason().unwrap_or("Status undefined").to_string(),
-    }
-}
+
+
+
+

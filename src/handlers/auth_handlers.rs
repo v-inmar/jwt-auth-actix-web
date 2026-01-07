@@ -73,14 +73,14 @@ impl AuthHandlers {
         // check email <-> user
         match UserEmailModel::get_by_value(&pool, &data.email).await {
             Err(_) => {
-                return JsonResponse::make_500_ressponse(&req);
+                return JsonResponse::make_500_response(&req);
             }
             Ok(None) => {}
             Ok(Some(user_email_model)) => {
 
                 match user_email_model.get_user(&pool).await{
                     Err(_) => {
-                        return JsonResponse::make_500_ressponse(&req);
+                        return JsonResponse::make_500_response(&req);
                     }
                     Ok(None) => {}
                     Ok(Some(_)) => {
@@ -93,24 +93,24 @@ impl AuthHandlers {
         // create the user
         match UserServices::create_new_user_service(&data, &pool).await{
             Err(_) => {
-                return JsonResponse::make_500_ressponse(&req);
+                return JsonResponse::make_500_response(&req);
             }
             Ok(user_model) => {
                 // ceate tokens here
                 match UserAuthidModel::get_by_id(&pool, user_model.authid_id).await{
                     Err(_) => {
-                        return JsonResponse::make_500_ressponse(&req);
+                        return JsonResponse::make_500_response(&req);
                     }
                     Ok(None) => {
 
                         // no authid model associated with user (VERY BAD!!!)
-                        return JsonResponse::make_500_ressponse(&req);
+                        return JsonResponse::make_500_response(&req);
                     }Ok(Some(user_authid_model)) => {
 
 
                         let access_token = match JwtUtils::gen_access_token(&user_authid_model.value){
                             Err(_) => {
-                                return JsonResponse::make_500_ressponse(&req);
+                                return JsonResponse::make_500_response(&req);
                             }
                             Ok(at) => at
 
@@ -118,7 +118,7 @@ impl AuthHandlers {
 
                         let refresh_token = match JwtUtils::gen_refresh_token(&user_authid_model.value){
                             Err(_) => {
-                                return JsonResponse::make_500_ressponse(&req);
+                                return JsonResponse::make_500_response(&req);
                             }
                             Ok(rt) => rt
 
@@ -140,7 +140,7 @@ impl AuthHandlers {
         let user_email_model = match UserEmailModel::get_by_value(&pool, &data.email).await{
             Err(e) => {
                 log::error!("{}", e);
-                return JsonResponse::make_500_ressponse(&req);
+                return JsonResponse::make_500_response(&req);
             }
             Ok(None) => {
                 return JsonResponse::make_response(&req, &StatusCode::UNAUTHORIZED, String::from("Invalid email and/or password"));
@@ -153,7 +153,7 @@ impl AuthHandlers {
         let user_model = match user_email_model.get_user(&pool).await{
             Err(e) => {
                 log::error!("{}", e);
-                return JsonResponse::make_500_ressponse(&req);
+                return JsonResponse::make_500_response(&req);
             }
             Ok(None) => {
                 return JsonResponse::make_response(&req, &StatusCode::UNAUTHORIZED, String::from("Invalid email and/or password"));
@@ -165,7 +165,7 @@ impl AuthHandlers {
         match user_model.check_password(&data.password){
             Err(e) => {
                 log::error!("{}", e);
-                return JsonResponse::make_500_ressponse(&req);
+                return JsonResponse::make_500_response(&req);
             }
             Ok(result) => {
                 if !result{
@@ -175,14 +175,14 @@ impl AuthHandlers {
                     match user_model.get_authid(&pool).await{
                         Err(e) => {
                             log::error!("{}", e);
-                            return JsonResponse::make_500_ressponse(&req);
+                            return JsonResponse::make_500_response(&req);
                         }
                         Ok(user_authid_model) => {
                             // create token
                             let access_token = match JwtUtils::gen_access_token(&user_authid_model.value){
                                 Err(e) => {
                                     log::error!("{}", e);
-                                    return JsonResponse::make_500_ressponse(&req);
+                                    return JsonResponse::make_500_response(&req);
                                 }
                                 Ok(at) => at
 
@@ -191,7 +191,7 @@ impl AuthHandlers {
                             let refresh_token = match JwtUtils::gen_refresh_token(&user_authid_model.value){
                                 Err(e) => {
                                     log::error!("{}", e);
-                                    return JsonResponse::make_500_ressponse(&req);
+                                    return JsonResponse::make_500_response(&req);
                                 }
                                 Ok(rt) => rt
 
@@ -216,7 +216,7 @@ impl AuthHandlers {
             // check if refresh token is not revoked yet
             match UserRevokedTokenModel::get_by_value(&pool, refresh_token_cookie.value()).await {
                 Err(_) => {
-                    return JsonResponse::make_500_ressponse(&req);
+                    return JsonResponse::make_500_response(&req);
                 }
                 Ok(Some(_)) => {
                     // already revoked, cannot use this token
@@ -233,7 +233,7 @@ impl AuthHandlers {
                             {
                                 return JsonResponse::make_response(&req, &StatusCode::UNAUTHORIZED, format!("Refresh token: {}", e.to_string()));
                             }else{
-                                return JsonResponse::make_500_ressponse(&req);
+                                return JsonResponse::make_500_response(&req);
                             }
                         }
                         Ok(token_data) => {
@@ -241,7 +241,7 @@ impl AuthHandlers {
                             match UserAuthidModel::get_by_value(&pool, &token_data.claims.sub).await{
                                 Err(e) => {
                                     log::error!("{}", e);
-                                    return JsonResponse::make_500_ressponse(&req);
+                                    return JsonResponse::make_500_response(&req);
                                 }Ok(None) => {
                                     return JsonResponse::make_response(&req, &StatusCode::UNAUTHORIZED, String::from("Authid value is not recognised"));
                                 }
@@ -249,7 +249,7 @@ impl AuthHandlers {
                                     match UserModel::get_by_authid_id(&pool, model.id).await{
                                         Err(e) => {
                                             log::error!("{}", e);
-                                            return JsonResponse::make_500_ressponse(&req);
+                                            return JsonResponse::make_500_response(&req);
                                         }
                                         Ok(None) => {
                                             return JsonResponse::make_response(&req, &StatusCode::UNAUTHORIZED, String::from("No associated user with authid value"));
@@ -267,7 +267,7 @@ impl AuthHandlers {
                             // get the authid and create new access and refresh tokens
                             let access_token = match JwtUtils::gen_access_token(&token_data.claims.sub){
                                 Err(_) => {
-                                    return JsonResponse::make_500_ressponse(&req);
+                                    return JsonResponse::make_500_response(&req);
                                 }
                                 Ok(at) => at
 
@@ -275,7 +275,7 @@ impl AuthHandlers {
 
                             let refresh_token = match JwtUtils::gen_refresh_token(&token_data.claims.sub){
                                 Err(_) => {
-                                    return JsonResponse::make_500_ressponse(&req);
+                                    return JsonResponse::make_500_response(&req);
                                 }
                                 Ok(rt) => rt
 
@@ -285,7 +285,7 @@ impl AuthHandlers {
                             match RevokedServices::create_new_revoke_token_service(&refresh_token_cookie.value(), &pool).await {
                                 Err(e) => {
                                     log::error!("{}", e);
-                                    return JsonResponse::make_500_ressponse(&req);
+                                    return JsonResponse::make_500_response(&req);
                                 }
                                 Ok(_) => {
                                     return JsonResponse::make_jwt_response(&req, &StatusCode::OK, &access_token, &refresh_token);
@@ -309,7 +309,7 @@ impl AuthHandlers {
             // check if token has been revoked
             match UserRevokedTokenModel::get_by_value(&pool, &refresh_token_cookie.value()).await{
                 Err(_) => {
-                    return JsonResponse::make_500_ressponse(&req);
+                    return JsonResponse::make_500_response(&req);
                 }
                 Ok(None) => {} // Not revoked yet
                 Ok(Some(_)) => {
@@ -333,7 +333,7 @@ impl AuthHandlers {
                     // revoke the refresh token
                     match RevokedServices::create_new_revoke_token_service(&refresh_token_cookie.value(), &pool).await{
                         Err(_) => {
-                            return JsonResponse::make_500_ressponse(&req);
+                            return JsonResponse::make_500_response(&req);
                         }
                         Ok(_) => {
                             return JsonResponse::make_response(&req, &StatusCode::OK, "Logged out successfully");
