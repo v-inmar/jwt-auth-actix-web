@@ -12,7 +12,7 @@ A small project showcasing how to use **Rust** as a backend REST API server usin
  - Unit Testing (Partial ⚠️)
  - Dockerize Actix-web + PostgreSQL ✅
  - CI/CD (partial - docker is already in use ⚠️)
- - Docs (including codeblock comments) ⚠️
+ - Docs (partial - /docs for high level docs) ⚠️
 
 
 
