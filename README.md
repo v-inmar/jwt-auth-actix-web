@@ -9,7 +9,7 @@ A small project showcasing how to use **Rust** as a backend REST API server usin
  - Actix-web (Rust)  as REST API backend ✅
  - Authorization and Authentication ✅
  - Communication with persistent storage ✅
- - Unit Testing ⚠️
+ - Unit Testing (Partial ⚠️)
  - Dockerize Actix-web + PostgreSQL ✅
  - CI/CD (partial - docker is already in use ⚠️)
  - Docs (including codeblock comments) ⚠️
